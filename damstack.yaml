@@ -1,0 +1,45 @@
+apiVersion: damstack/v2
+name: grafana
+kind: app
+description: Grafana for the platform, with Mimir and Loki wired as data sources
+requires:
+  damstack: ">=0.8.0"
+  toolbox: ">=1.1.0, <2.0.0"
+  provides: [nomad, vault-kv, ingress-traefik]
+
+config: template/grafana.yaml.tmpl
+done:
+  - "Grafana is at https://grafana.{{ .config.infra_domain }}, through WireGuard."
+  - "The admin password: damstack grafana output admin_password"
+  - "A consumer app pushes its own dashboards and alerts to it with the grafana provider."
+
+targets:
+  nomad:
+    steps:
+      - name: apply
+        title: Grafana
+        takes: 2 min
+        tofu:
+          dir: infra
+          action: apply
+          policy: &policy {dir: policy}
+        tunnel: true
+        confirm: true
+    commands:
+      plan:
+        tofu: {dir: infra, action: plan, policy: *policy}
+        tunnel: true
+      output:
+        tofu: {dir: infra, action: output}
+
+check:
+  answers: test/answers.yaml
+  platform: test/platform.yaml
+  steps:
+    - name: outputs
+      run:
+        - sh
+        - -c
+        - >-
+          cd "$DAMSTACK_STACK/infra" && export TF_DATA_DIR="$DAMSTACK_PROJECT/.damstack/work/tofu-test" TF_VAR_project="$DAMSTACK_PROJECT" &&
+          tofu init -backend=false -input=false -lockfile=readonly >/dev/null && tofu test -no-color

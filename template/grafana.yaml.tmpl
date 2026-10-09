@@ -1,0 +1,10 @@
+# Grafana for the platform. The policies refuse a plan that would destroy its
+# database; list the address under allow_destroy to let it go.
+# Host name is grafana.<infra_domain>, on Traefik's internal (WireGuard) entrypoint.
+# Data sources point at the Mimir and Loki apps by their default ports; change
+# these if those apps were given other ports.
+mimir_port: 9009
+loki_port: 3100
+# Grafana faces no public port; it is served through Traefik on WireGuard only.
+public_ports: []
+allow_destroy: []
