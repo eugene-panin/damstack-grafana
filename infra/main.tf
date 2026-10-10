@@ -15,7 +15,7 @@ locals {
 }
 
 module "grafana" {
-  source = "git::https://github.com/eugene-panin/terraform-nomad-grafana.git?ref=v0.1.1"
+  source = "git::https://github.com/eugene-panin/terraform-nomad-grafana.git?ref=v0.1.2"
 
   hostname      = "grafana.${local.stack.infra_domain}"
   datasources   = local.datasources
