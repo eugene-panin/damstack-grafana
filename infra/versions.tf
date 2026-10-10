@@ -4,6 +4,10 @@ terraform {
   backend "local" {}
 
   required_providers {
+    consul = {
+      source  = "hashicorp/consul"
+      version = "~> 2.21"
+    }
     nomad = {
       source  = "hashicorp/nomad"
       version = "~> 2.6"

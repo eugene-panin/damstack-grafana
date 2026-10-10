@@ -1,3 +1,4 @@
+mock_provider "consul" {}
 mock_provider "nomad" {}
 mock_provider "vault" {}
 mock_provider "random" {}

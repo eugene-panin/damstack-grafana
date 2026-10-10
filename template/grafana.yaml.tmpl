@@ -9,3 +9,8 @@ loki_port: 3100
 # Grafana faces no public port; it is served through Traefik on WireGuard only.
 public_ports: []
 allow_destroy: []
+# The Consul service mesh, as a client: Grafana reaches Mimir and Loki by their mesh names
+# (mimir.virtual.consul, loki.virtual.consul) through Envoy. Allow grafana in their
+# mesh.allow first.
+#   mesh:
+#     enabled: true
